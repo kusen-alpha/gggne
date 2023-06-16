@@ -109,15 +109,16 @@ class DetailListExtractor:
                 'title') or ele.get(
                 'TITLE') or '').strip()
             text = text.replace(' ', '')
+            text_count += len(text)
+            urls_dup.add(url)
             if not text or len(text) <= 4:
                 continue
-            text_count += len(text)
             url = urllib.parse.urljoin(ele.base, url)
             url_parse = urllib.parse.urlparse(url)
             domain = url_parse.netloc
             if domain_strictly and base_domain != domain:
                 continue
-            urls_dup.add(url)
+
             _path = cls.gen_many_regex(
                 url_parse.path, names=['/d', 'd_', '_d', '-d', 'd_', '/dw', 'dw'])
             _query = cls.gen_many_regex(url_parse.query, names=['=d'])
@@ -264,7 +265,7 @@ class DetailListExtractor:
     @classmethod
     def calculate_path(cls, urls, paths):
         gdf = cls.generate_df(urls, paths)
-        # print(gdf)
+        print(gdf)
         rdf, regex = cls.calculate_result(gdf)
         urls = list(rdf[0].values)
         # print(result_urls)

@@ -40,7 +40,7 @@ def download_and_extract(
             continue
     else:
         return {}
-    html = utils.string2element(response.text)
+    html = utils.string2element(response.text, base_url=url)
     return extract(
         response.text, html, url, title_config=title_config,
         content_config=content_config, publish_time_config=publish_time_config,
@@ -71,7 +71,7 @@ def extract(html_text, html=None, base_url=None, title_config=None,
     result = {}
     if html is None:
         html_text = re.sub('</?br.*?>', '\n', html_text)
-        html = utils.string2element(html_text)
+        html = utils.string2element(html_text, base_url=base_url)
     text = ' '.join(html.xpath('//text()')).strip()
     result['title'] = utils.extract(
         html_text, html, **(title_config or {})) or TitleExtractor.extract(html)
